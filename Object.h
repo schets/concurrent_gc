@@ -15,7 +15,7 @@ class Object {
 public:
 	Reference next;
 	uint8_t color;
-	virtual ~Object() = 0;
+	virtual ~Object() {}
 	virtual ref_list get_references() = 0;
 	virtual size_t get_size() = 0;
 };
@@ -33,4 +33,10 @@ public:
 	}
 	ref_list get_references() override final { return{ refs, N }; }
 	size_t get_size() override final { return sizeof(*this); }
+	Reference& operator[](size_t index) {
+		return refs[index];
+	}
+	const Reference& operator[](size_t index) const {
+		return refs[index];
+	}
 };

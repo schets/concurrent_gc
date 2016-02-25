@@ -9,10 +9,11 @@ class GC {
 	void free_mem(Reference r);
 	void sweep();
 public:
+	GC(): colorset(0), head(nullptr) {}
 	template<class O>
 	Reference create() {
-		O* ptr = alloc_mem(sizeof(O));
-		new (ptr) O(head);
+		O* ptr = (O*)alloc_mem(sizeof(O));
+		new (ptr) O();
 		Object* rval = ptr;
 		rval->color = 2;
 		rval->next = head;
@@ -21,4 +22,3 @@ public:
 	}
 	void run_gc(const std::vector<Reference>& roots);
 };
-

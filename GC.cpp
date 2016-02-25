@@ -40,6 +40,9 @@ void GC::run_gc(const std::vector<Reference>& roots) {
 // Could optimize stack usage here, can already know 'white'/'black'
 // from passed object
 void traverse(Reference r, const colors& current_colors) {
+	if r.is_null() {
+		return;
+	}
 	Object* obj = r.get_object();
 	uint8_t cur_color = obj->color;
 	if (cur_color != current_colors.white) {
@@ -59,7 +62,7 @@ void traverse(Reference r, const colors& current_colors) {
 
 void GC::sweep() {
 	if (head.is_null()) { return; }
-	
+
 	uint8_t good_color = colorsets[colorset].black;
 	Reference new_head = head;
 	while (!new_head.is_null() &&
