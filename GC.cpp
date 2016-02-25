@@ -43,7 +43,7 @@ void GC::run_gc(const std::vector<Reference>& roots) {
 }
 
 // Could optimize stack usage here, can already know 'white'/'black'
-// from passed object
+// from passed object if modified
 void traverse(Reference r, const colors& current_colors) {
 	if (r.is_null()) {
 		return;
