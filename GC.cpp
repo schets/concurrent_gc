@@ -1,5 +1,6 @@
 #include "GC.h"
 
+#include <iostream>
 #include <stdlib.h>
 
 // white = unseen
@@ -72,10 +73,13 @@ void GC::sweep() {
 	Reference new_head = head;
 	while (!new_head.is_null() &&
 		   new_head.get_object()->color != good_color) {
-		free_mem(new_head);
+		Reference tofree = new_head;
 		new_head = new_head.get_object()->next;
+		free_mem(tofree);
 	}
-
+    if (new_head.is_null()) {
+    	return;
+    }
 	head = new_head;
 	head.get_object()->color = fresh_color;
 	Reference prev = head;
@@ -90,6 +94,7 @@ void GC::sweep() {
 		else {
 			Reference tofree = next;
 			next = obj->next;
+			prev.get_object()->next = next;
 			free_mem(tofree);
 		}
 	}
