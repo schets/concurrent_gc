@@ -25,6 +25,10 @@ void GC::free_mem(Reference r) {
 	free(r.get_object());
 }
 
+uint8_t GC::get_starting_color() {
+	return colorsets[colorset].white;
+}
+
 void GC::run_gc(const std::vector<Reference>& roots) {
 	colors current_colors = colorsets[colorset];
 
@@ -34,13 +38,13 @@ void GC::run_gc(const std::vector<Reference>& roots) {
 	}
 	sweep();
 	// swap colorset
-	colorset ^= 1;
+	//colorset ^= 1;
 }
 
 // Could optimize stack usage here, can already know 'white'/'black'
 // from passed object
 void traverse(Reference r, const colors& current_colors) {
-	if r.is_null() {
+	if (r.is_null()) {
 		return;
 	}
 	Object* obj = r.get_object();
@@ -64,6 +68,7 @@ void GC::sweep() {
 	if (head.is_null()) { return; }
 
 	uint8_t good_color = colorsets[colorset].black;
+	uint8_t fresh_color = colorsets[colorset].white;
 	Reference new_head = head;
 	while (!new_head.is_null() &&
 		   new_head.get_object()->color != good_color) {
@@ -72,11 +77,13 @@ void GC::sweep() {
 	}
 
 	head = new_head;
+	head.get_object()->color = fresh_color;
 	Reference prev = head;
 	Reference next = head.get_object()->next;
 	while (!next.is_null()) {
 		Object* obj = next.get_object();
 		if (obj->color == good_color) {
+			obj->color = fresh_color;
 			prev = next;
 			next = obj->next;
 		}

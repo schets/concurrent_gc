@@ -7,6 +7,7 @@ class GC {
 	Reference head;
 	void* alloc_mem(size_t size);
 	void free_mem(Reference r);
+	uint8_t get_starting_color();
 	void sweep();
 public:
 	GC(): colorset(0), head(nullptr) {}
@@ -15,7 +16,7 @@ public:
 		O* ptr = (O*)alloc_mem(sizeof(O));
 		new (ptr) O();
 		Object* rval = ptr;
-		rval->color = 2;
+		rval->color = get_starting_color();
 		rval->next = head;
 		head = Reference(rval);
 		return rval;
