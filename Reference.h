@@ -10,5 +10,6 @@ public:
 	Object* get_object() { return obj; }
 	const Object* get_object() const { return obj; }
 	void set_object(Object* newobj) { obj = newobj; }
+	bool is_null() const { return obj == nullptr; }
 };
 
