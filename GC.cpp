@@ -1,6 +1,6 @@
 #include "GC.h"
 
-#include "Object.h"
+#include <stdlib.h>
 
 // white = unseen
 // grey = seen but partially marked

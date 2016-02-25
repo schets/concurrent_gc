@@ -1,5 +1,6 @@
 #pragma once
 #include "Reference.h"
+#include "Object.h"
 #include <vector>
 class GC {
 	uint8_t colorset;
@@ -9,13 +10,13 @@ class GC {
 	void sweep();
 public:
 	template<class O>
-	Object* create() {
+	Reference create() {
 		O* ptr = alloc_mem(sizeof(O));
 		new (ptr) O(head);
 		Object* rval = ptr;
 		rval->color = 2;
 		rval->next = head;
-		head = rval;
+		head = Reference(rval);
 		return rval;
 	}
 	void run_gc(const std::vector<Reference>& roots);

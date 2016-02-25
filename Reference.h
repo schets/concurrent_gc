@@ -7,6 +7,7 @@ class Object;
 class Reference {
 	Object* obj;
 public:
+	Reference(Object *o): obj(o) {}
 	Object* get_object() { return obj; }
 	const Object* get_object() const { return obj; }
 	void set_object(Object* newobj) { obj = newobj; }
